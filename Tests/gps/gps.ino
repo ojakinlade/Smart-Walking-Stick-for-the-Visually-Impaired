@@ -18,7 +18,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  while(ss.available() > 0)
+  if(ss.available() > 0)
   {
     if(gps.encode(ss.read()))
     {
@@ -39,10 +39,10 @@ void displayInfo(void)
   {
     Serial.print(gps.location.lat(), 6);
     Serial.print(F(","));
-    Serial.print(gps.location.lng(),6);
+    Serial.println(gps.location.lng(),6);
   }
   else
   {
-    Serial.print(F("INVALID"));
+    Serial.println(F("INVALID"));
   }
 }
