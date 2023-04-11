@@ -50,54 +50,38 @@ void setup() {
 }
 
 void loop() {
-  // Get location every 10 seconds 
-  if(millis() - prevTime >= 1000)
+  gpsSerial.listen();
+  if(gpsSerial.available() > 0)
   {
-    gpsSerial.listen();
-    if(gpsSerial.available() > 0)
+    if(gps.encode(gpsSerial.read()))
     {
-      Serial.println("Data Available");
-      Serial.println(gpsSerial.read());
-      if(gps.encode(gpsSerial.read()))
-      {
-        Serial.println("Decoded");
-        loc.latitude = gps.location.lat();
-        loc.longitude = gps.location.lng();
+      loc.latitude = gps.location.lat();
+      loc.longitude = gps.location.lng();
 
-        //Encode Location data into char array
-        memset(locChar.lat,'\0',strlen(locChar.lat));
-        memset(locChar.lng,'\0',strlen(locChar.lng));
-        memset(locStr,'\0',strlen(locStr));
-        FloatToString(loc.latitude,locChar.lat,2);
-        FloatToString(loc.longitude,locChar.lng,2);
-        strcat(locStr,"Lat: ");
-        strcat(locStr,locChar.lat);
-        strcat(locStr," Lng: ");
-        strcat(locStr,locChar.lng);
-        Serial.println(locStr);
-//        if(gps.location.isValid())
-//        {
-//          Serial.print(gps.location.lat(), 6);
-//          Serial.print(F(","));
-//          Serial.println(gps.location.lng(),6);
-//        }
-      }
+      //Encode Location data into char array
+      memset(locChar.lat,'\0',strlen(locChar.lat));
+      memset(locChar.lng,'\0',strlen(locChar.lng));
+      memset(locStr,'\0',strlen(locStr));
+      FloatToString(loc.latitude,locChar.lat,2);
+      FloatToString(loc.longitude,locChar.lng,2);
+      strcat(locStr,"Lat: ");
+      strcat(locStr,locChar.lat);
+      strcat(locStr," Lng: ");
+      strcat(locStr,locChar.lng);
+      Serial.println(locStr);
     }
-    prevTime = millis();
   }
+
   button.Poll(&Button);
   if(Button.isDebounced && !Button.prevPressed)
   {
     Button.prevPressed = true;
     digitalWrite(13,HIGH);
-    gsm.SendSMS("+2347032503874","HELLO!!!!");
+    gsm.SendSMS("+2347032503874",locStr);
   }
   else if(!Button.isDebounced && Button.prevPressed)
   {
     Button.prevPressed = false;
     digitalWrite(13,LOW);
   }
-  Serial.print("Distance(CM): ");
-  Serial.println(ultrasonic.GetDistance());
-  //delay(1000);
 }

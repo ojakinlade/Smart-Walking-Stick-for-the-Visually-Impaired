@@ -10,6 +10,8 @@ TinyGPSPlus gps;
 //Serial connection to the GPS device
 SoftwareSerial ss(gpsTx,gpsRx);
 
+uint32_t prevTime;
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
