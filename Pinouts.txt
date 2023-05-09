@@ -1,0 +1,9 @@
+Upper side
+1. GPS (GPS TX: 3, GPS RX: 4)
+2. SIM800L (SIM TX: 7, SIM RX: 8)
+3. BUTTON (5)
+
+Bottom side
+1. Ultrasonic sensor (TRIG: 9, ECHO: 10)
+2. Buzzer (8)
+3. Vibrating module (7)
